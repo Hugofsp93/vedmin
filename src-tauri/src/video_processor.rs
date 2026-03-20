@@ -64,7 +64,7 @@ pub async fn process_video_cmd(input_path: String, final_cut_sec: u8, output_dir
     // 4. Construct the ffmpeg command.
     let final_out_dir = if output_dir.is_empty() {
         if let Ok(home) = std::env::var("HOME") {
-            format!("{}/Desktop/REVELO/HTML Revelo Claude/record_video", home)
+            format!("{}/Desktop/Vedmin", home)
         } else {
             output_dir
         }
@@ -79,7 +79,7 @@ pub async fn process_video_cmd(input_path: String, final_cut_sec: u8, output_dir
         }
     }
 
-    let output_file_name = "Hugo_REVELOAPP.mp4".to_string();
+    let output_file_name = "Hugo_APP.mp4".to_string();
     let final_output_path = out_dir_path.join(output_file_name);
 
     let trimmed_duration_str = trimmed_duration.to_string();
