@@ -23,8 +23,14 @@
   });
   let selectedFile: string | null = $state(null);
   let outputDir: string | null = $state(null);
-  let finalCutSec: 1 | 2 = $state(1);
+  let finalCutSec = $state<0 | 1 | 2>(1);
   let showCutSelect = $state(false);
+
+  const cutButtonTitle = $derived(
+    finalCutSec === 0
+      ? "No cut"
+      : `Cut ${finalCutSec}s`,
+  );
 
   // Status: idle, processing, success, error
   let status: "idle" | "processing" | "success" | "error" = $state("idle");
@@ -104,7 +110,7 @@
     statusMessage = "Editing video...";
 
     try {
-      // Default output to Desktop/Vedmin if not selected
+      // Default output to Desktop if not selected
       // We will pass an empty string if null, Rust will handle the absolute Home path.
 
       const out_path = outputDir || "";
@@ -149,6 +155,13 @@
 
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div class="layout" onmousedown={handleDragStart}>
+  <img
+    class="corner-mascot"
+    src="/mage.png"
+    alt=""
+    draggable="false"
+  />
+
   <!-- MAIN DROP ZONE -->
   <main class="main-area">
     <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -200,7 +213,7 @@
         <button
           class="icon-btn glass"
           disabled={!selectedFile}
-          title="Cortar {finalCutSec}s"
+          title={cutButtonTitle}
           onmouseenter={() => (hoverStates.scissors = true)}
           onmouseleave={() => (hoverStates.scissors = false)}
           onclick={() => selectedFile && (showCutSelect = !showCutSelect)}
@@ -219,6 +232,14 @@
             class="select-menu glass"
             onmousedown={(e) => e.stopPropagation()}
           >
+            <button
+              class="menu-item"
+              class:active={finalCutSec === 0}
+              onclick={() => {
+                finalCutSec = 0;
+                showCutSelect = false;
+              }}>0s</button
+            >
             <button
               class="menu-item"
               class:active={finalCutSec === 1}
@@ -294,6 +315,17 @@
     grid-template-rows: 1fr 40px;
     height: 100%;
     position: relative;
+  }
+
+  .corner-mascot {
+    position: absolute;
+    top: -30px;
+    right: 4px;
+    height: 80px;
+    width: auto;
+    pointer-events: none;
+    z-index: 5;
+    user-select: none;
   }
 
   .main-area {

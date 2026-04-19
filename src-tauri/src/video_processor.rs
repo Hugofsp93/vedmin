@@ -64,7 +64,7 @@ pub async fn process_video_cmd(input_path: String, final_cut_sec: u8, output_dir
     // 4. Construct the ffmpeg command.
     let final_out_dir = if output_dir.is_empty() {
         if let Ok(home) = std::env::var("HOME") {
-            format!("{}/Desktop/Vedmin", home)
+            format!("{}/Desktop", home)
         } else {
             output_dir
         }
